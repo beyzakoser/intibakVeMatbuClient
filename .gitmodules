@@ -1,3 +1,6 @@
 [submodule "Lesson-Adaptation-System"]
 	path = Lesson-Adaptation-System
 	url = https://github.com/beyzakoser/intibakVeMatbuClient.git
+[submodule "intibakVeMatbuClient"]
+	path = intibakVeMatbuClient
+	url = https://github.com/beyzakoser/intibakVeMatbuClient.git
