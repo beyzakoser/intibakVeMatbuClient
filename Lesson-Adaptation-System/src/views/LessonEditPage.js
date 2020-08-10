@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import MaterialTable from "material-table";
 import Grid from "@material-ui/core/Grid";
@@ -37,9 +37,10 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import Link from "@material-ui/core/Link";
 import Copyright from '../components/Copyright'
 import axios from 'axios'
+import lodash from 'lodash'
 
 const drawerWidth = 270;
-
+var veriler = [{},];
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -121,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function LessonEditPage() {
-    
+
     const mainListItems = (
         <div>
             <RouterLink to="/dashboard">
@@ -159,24 +160,27 @@ function LessonEditPage() {
         </div>
     );
 
-  React.useEffect(()=>{
-    axios.get('http://localhost:3004/dersler').then(response => {
-        //console.log(response.data);    
-        setState({
-            columns: [
-                { title: 'Ders Kodu', field: 'dersKodu' },
-                { title: 'Ders Adı', field: 'dersAd' },
-                { title: 'Akts', field: 'akts' },
-                { title: 'Teori', field: 'teoriSaat' },
-                { title: 'Lab', field: 'labSaat' },
-                { title: 'Kontenjan', field: 'kontenjan' },
-                { title: 'Online', field: 'online' },
+    React.useEffect(() => {
+        axios.get('http://localhost:3004/dersler').then(response => {
 
-            ],
-            data: response.data,
-        })
-    }).catch(err => console.log(err));
-  },[]);
+            console.log(response.data);
+            veriler = response.data
+            setState({
+                columns: [
+                    { title: 'Ders Kodu', field: 'dersKodu' },
+                    { title: 'Ders Adı', field: 'dersAd' },
+                    { title: 'Akts', field: 'akts' },
+                    { title: 'Teori', field: 'teoriSaat' },
+                    { title: 'Lab', field: 'labSaat' },
+                    { title: 'Kontenjan', field: 'kontenjan' },
+                    { title: 'Online', field: 'online' },
+
+                ],
+                data: response.data,
+            })
+        }).catch(err => console.log(err));
+    }, []);
+
 
 
     const [state, setState] = React.useState({
@@ -192,7 +196,7 @@ function LessonEditPage() {
         ],
         data: [
 
-            { dersKodu: 'MAT227', dersAd: "Calculus I",  akts: 7, teoriSaat: 4, labSaat: 2, kontenjan: 20, online: 'evet' },
+            { dersKodu: 'MAT227', dersAd: "Calculus I", akts: 7, teoriSaat: 4, labSaat: 2, kontenjan: 20, online: 'evet' },
 
 
         ],
@@ -353,14 +357,14 @@ function LessonEditPage() {
                                             Varsayılana dönmek istediğinize emin misiniz?
                                         </DialogContentText>
                                     </DialogContent>
-                                    
+
                                     <Button autoFocus variant="outlined" onClick={handleCloseV} color="primary">
                                         İptal
                                     </Button>
                                     <Button variant="outlined" onClick={handleCloseV} color="primary" autoFocus>
                                         Varsayılana Dön
                                     </Button>
-                                
+
                                 </Dialog>
                             </div>
                         </Grid>
@@ -368,11 +372,41 @@ function LessonEditPage() {
                         </Grid>
                         <Grid item sm={2}>
                             <div>
-                                <Button variant="contained" color="primary" size="medium" 
-                                //onClick={dialogOpen}
-                                onClick={
-                                    ac
-                                }
+                                <Button variant="contained" color="primary" size="medium"
+                                    //onClick={dialogOpen}
+                                    onClick={() => {
+                                        console.log(veriler);
+                                        //a=>veriler b=>state.data
+                                        //insert kısmı
+                                        var eklenenler = []
+                                        Object.keys(state.data).forEach(key => {
+                                            if ((state.data)[key].id == undefined) {
+                                                eklenenler.push((state.data)[key])
+
+                                            }
+                                        })
+                                        var obje = [{ insert: eklenenler }]
+
+                                        //update kısmı
+                                        var serialized_Items_Prev = veriler.map(i => JSON.stringify(i));
+                                        var degisenler = (state.data).filter(i => !serialized_Items_Prev.includes(JSON.stringify(i)));
+                                        var guncellenecek = degisenler.filter((e) => !(obje[0].insert).includes(e));
+                                        var updated = { update: guncellenecek } //update olanlar eklendi.
+                                        obje.push(updated)
+
+                                        //delete kısmı
+                                        var c = lodash.differenceWith(veriler, state.data, function (o1, o2) {
+                                            return o1['id'] === o2['id']
+                                        });
+                                        var deleted = { delete: c } //silinenler 
+                                        obje.push(deleted)
+                                        console.log(obje);
+                                        console.log(obje[0]);//insert listesi
+                                        console.log(obje[1]);//update listesi
+                                        console.log(obje[2]);//delete listesi
+
+                                    }
+                                    }
                                 >
                                     Kaydet
                                 </Button>
