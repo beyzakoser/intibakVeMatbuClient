@@ -381,25 +381,32 @@ function LessonEditPage() {
 
                                             }
                                         })
-                                        var obje = [{ insert: eklenenler }]
+                                        var obje = [{ inserts: eklenenler }]
 
                                         //update kısmı
                                         var serialized_Items_Prev = veriler.map(i => JSON.stringify(i));
                                         var degisenler = (state.data).filter(i => !serialized_Items_Prev.includes(JSON.stringify(i)));
-                                        var guncellenecek = degisenler.filter((e) => !(obje[0].insert).includes(e));
-                                        var updated = { update: guncellenecek } //update olanlar eklendi.
+                                        var guncellenecek = degisenler.filter((e) => !(obje[0].inserts).includes(e));
+                                        var updated = { updates: guncellenecek } //update olanlar eklendi.
                                         obje.push(updated)
 
                                         //delete kısmı
                                         var c = lodash.differenceWith(veriler, state.data, function (o1, o2) {
                                             return o1['id'] === o2['id']
                                         });
-                                        var deleted = { delete: c } //silinenler 
+                                        var deleted = { deletes: c } //silinenler eklendi
                                         obje.push(deleted)
+                                        //gormek için ekrana yazdırdım
                                         console.log(obje);
                                         console.log(obje[0]);//insert listesi
                                         console.log(obje[1]);//update listesi
                                         console.log(obje[2]);//delete listesi
+                                        
+                                        //veritabanına gönderme kısmı
+                                        axios.post('http://localhost:3004/dersDuzenle', obje)
+                                        .then(response => {
+                                            console.log(response);
+                                        }).catch(err => console.log(err))
 
                                     }
                                     }
