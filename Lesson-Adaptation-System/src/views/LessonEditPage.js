@@ -162,8 +162,6 @@ function LessonEditPage() {
 
     React.useEffect(() => {
         axios.get('http://localhost:3004/dersler').then(response => {
-
-            console.log(response.data);
             veriler = response.data
             setState({
                 columns: [
@@ -375,8 +373,6 @@ function LessonEditPage() {
                                 <Button variant="contained" color="primary" size="medium"
                                     //onClick={dialogOpen}
                                     onClick={() => {
-                                        console.log(veriler);
-                                        //a=>veriler b=>state.data
                                         //insert kısmı
                                         var eklenenler = []
                                         Object.keys(state.data).forEach(key => {
