@@ -174,6 +174,7 @@ function LessonEditPage() {
                     { title: 'Kontenjan', field: 'kontenjan' },
                     { title: 'Terori Online', field: 'teoriOnline' },
                     { title: 'Lab Online', field: 'labOnline' },
+                    { title: 'Dönem', field: 'donem' },
 
                 ],
                 data: response.data,
@@ -193,11 +194,12 @@ function LessonEditPage() {
             { title: 'Kontenjan', field: 'kontenjan' },
             { title: 'Terori Online', field: 'teoriOnline' },
             { title: 'Lab Online', field: 'labOnline' },
+            { title: 'Dönem', field: 'donem' },
 
         ],
         data: [
 
-            { dersKodu: 'MAT227', dersAd: "Calculus I",kredi:2, akts: 7, teoriSaat: 4, labSaat: 2, kontenjan: 20, teoriOnline: 'evet' ,labOnline:'evet'},
+            { dersKodu: 'MAT227', dersAd: "Calculus I", kredi: 2, akts: 7, teoriSaat: 4, labSaat: 2, kontenjan: 20, teoriOnline: 'evet', labOnline: 'evet' },
 
 
         ],
@@ -251,7 +253,7 @@ function LessonEditPage() {
         setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    
+
     /*Bu kısım açılır buton olan varsayılana dön içindir*/
     return (
         <div className={classes.root}>
@@ -375,54 +377,7 @@ function LessonEditPage() {
                         <Grid item sm={2}>
                             <div>
                                 <Button variant="contained" color="primary" size="medium"
-                                    //onClick={dialogOpen}
-                                    
-                                    onClick={
-                                        () => {
-                                        //insert kısmı
-                                
-                                        var eklenenler = []
-                                        var guncellenecek=[]
-                                        var obje=[{inserts:[]},{updates:[]},{deletes:[]}]
-                                        Object.keys(state.data).forEach(key => {
-                                            if ((state.data)[key].id === undefined) {
-                                                
-                                                eklenenler.push((state.data)[key])
-
-                                            }
-                                        })
-                                        //console.log("ilk",obje)
-                                        obje = [{ inserts: eklenenler }]
-                                        
-
-                                        //update kısmı
-                                        var serialized_Items_Prev = veriler.map(i => JSON.stringify(i));
-                                        var degisenler = (state.data).filter(i => !serialized_Items_Prev.includes(JSON.stringify(i)));
-                                        guncellenecek = degisenler.filter((e) => !(obje[0].inserts).includes(e));
-                                        var updated = { updates: guncellenecek } //update olanlar eklendi.
-                                        obje.push(updated)
-                                        
-
-                                        //delete kısmı
-                                        var c = lodash.differenceWith(veriler, state.data, function (o1, o2) {
-                                            return o1['id'] === o2['id']
-                                        });
-                                        var deleted = { deletes: c } //silinenler eklendi
-                                        obje.push(deleted)
-                                        //gormek için ekrana yazdırdım
-                                        console.log(obje);
-                                        console.log(obje[0]);//insert listesi
-                                        console.log(obje[1]);//update listesi
-                                        console.log(obje[2]);//delete listesi
-                                        
-                                        //veritabanına gönderme kısmı
-                                        axios.post('http://localhost:3004/dersDuzenle', obje)
-                                        .then(response => {
-                                            console.log(response);
-                                        }).catch(err => console.log(err))
-
-                                    }
-                                    }
+                                    onClick={dialogOpen}
                                 >
                                     Kaydet
                                 </Button>
@@ -442,7 +397,52 @@ function LessonEditPage() {
                                         <Button autoFocus variant="outlined" onClick={dialogClose} color="primary">
                                             İptal
                                         </Button>
-                                        <Button variant="outlined" onClick={dialogClose} color="primary" autoFocus>
+                                        <Button variant="outlined" color="primary" autoFocus
+                                            //onClick={dialogClose}
+                                            onClick={
+                                                () => {
+                                                    //insert kısmı
+                                                    var eklenenler = []
+                                                    var guncellenecek = []
+
+                                                    Object.keys(state.data).forEach(key => {
+                                                        if ((state.data)[key].id === undefined) {
+                                                            eklenenler.push((state.data)[key])
+                                                        }
+                                                    })
+                                                    var obje = [{ inserts: eklenenler }]
+
+                                                    //update kısmı
+                                                    var serialized_Items_Prev = veriler.map(i => JSON.stringify(i));
+                                                    var degisenler = (state.data).filter(i => !serialized_Items_Prev.includes(JSON.stringify(i)));
+                                                    guncellenecek = degisenler.filter((e) => !(obje[0].inserts).includes(e));
+                                                    var updated = { updates: guncellenecek } //update olanlar eklendi.
+                                                    obje.push(updated)
+
+                                                    //delete kısmı
+                                                    var c = lodash.differenceWith(veriler, state.data, function (o1, o2) {
+                                                        return o1['id'] === o2['id']
+                                                    });
+                                                    var deleted = { deletes: c } //silinenler eklendi
+                                                    obje.push(deleted)
+                                                    
+                                                    //gormek için ekrana yazdırdım
+                                                    console.log(obje);
+                                                    console.log(obje[0]);//insert listesi
+                                                    console.log(obje[1]);//update listesi
+                                                    console.log(obje[2]);//delete listesi
+
+                                                    //veritabanına gönderme kısmı
+                                                    axios.post('http://localhost:3004/dersDuzenle', obje)
+                                                        .then(response => {
+                                                            console.log(response);
+                                                        }).catch(err => console.log(err))
+
+                                                    dialogClose()
+                                                }
+                                               
+                                            }
+                                        >
                                             Kaydet
                                         </Button>
                                     </DialogActions>

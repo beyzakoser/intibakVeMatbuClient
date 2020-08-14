@@ -111,10 +111,7 @@ export default function SignIn() {
                                     .then(response => {
                                         console.log(response);
                                         if (response.data = 'success') {
-                                            history.push('/dashboard')
-                                            //console.log("başarılı");
-
-                                            
+                                            history.push('/dashboard')   
                                         }
                                     }).catch(err => console.log(err))
                             }
