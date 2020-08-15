@@ -38,7 +38,7 @@ import Link from "@material-ui/core/Link";
 import Copyright from '../components/Copyright'
 import axios from 'axios'
 import lodash from 'lodash'
-
+var counter=0;
 const drawerWidth = 270;
 var veriler = [{},];
 const useStyles = makeStyles((theme) => ({
@@ -158,32 +158,8 @@ function LessonEditPage() {
                 </ListItem>
             </RouterLink>
         </div>
-    );
-
-    React.useEffect(() => {
-        axios.get('http://localhost:3004/dersler').then(response => {
-            veriler = response.data
-            setState({
-                columns: [
-                    { title: 'Ders Kodu', field: 'dersKodu' },
-                    { title: 'Ders Adı', field: 'dersAd' },
-                    { title: 'Kredi', field: 'kredi' },
-                    { title: 'Akts', field: 'akts' },
-                    { title: 'Teori', field: 'teoriSaat' },
-                    { title: 'Lab', field: 'labSaat' },
-                    { title: 'Kontenjan', field: 'kontenjan' },
-                    { title: 'Terori Online', field: 'teoriOnline' },
-                    { title: 'Lab Online', field: 'labOnline' },
-                    { title: 'Dönem', field: 'donem' },
-
-                ],
-                data: response.data,
-            })
-        }).catch(err => console.log(err));
-    }, []);
-
-
-    const [state, setState] = React.useState({
+    ); 
+   const [state, setState] = React.useState({
         columns: [
             { title: 'Ders Kodu', field: 'dersKodu' },
             { title: 'Ders Adı', field: 'dersAd' },
@@ -204,8 +180,31 @@ function LessonEditPage() {
 
         ],
     });
+   
+    React.useEffect(() => {
+        axios.get('http://localhost:3004/dersler').then(response => {
+            veriler = response.data          
+            setState({
+                columns: [
+                    { title: 'Ders Kodu', field: 'dersKodu' },
+                    { title: 'Ders Adı', field: 'dersAd' },
+                    { title: 'Kredi', field: 'kredi' },
+                    { title: 'Akts', field: 'akts' },
+                    { title: 'Teori', field: 'teoriSaat' },
+                    { title: 'Lab', field: 'labSaat' },
+                    { title: 'Kontenjan', field: 'kontenjan' },
+                    { title: 'Terori Online', field: 'teoriOnline' },
+                    { title: 'Lab Online', field: 'labOnline' },
+                    { title: 'Dönem', field: 'donem' },
 
+                ],
+                data: response.data,
+            })
+            
+        }).catch(err => console.log(err));
+    }, []);
 
+      
     /*Bu kısım açılır buton olan kaydet içindir*/
     const [open, setOpen] = React.useState(true);
 
@@ -253,7 +252,7 @@ function LessonEditPage() {
         setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+ 
     /*Bu kısım açılır buton olan varsayılana dön içindir*/
     return (
         <div className={classes.root}>
@@ -401,10 +400,11 @@ function LessonEditPage() {
                                             //onClick={dialogClose}
                                             onClick={
                                                 () => {
+                                                    
                                                     //insert kısmı
                                                     var eklenenler = []
                                                     var guncellenecek = []
-
+                                                
                                                     Object.keys(state.data).forEach(key => {
                                                         if ((state.data)[key].id === undefined) {
                                                             eklenenler.push((state.data)[key])
@@ -425,7 +425,7 @@ function LessonEditPage() {
                                                     });
                                                     var deleted = { deletes: c } //silinenler eklendi
                                                     obje.push(deleted)
-                                                    
+
                                                     //gormek için ekrana yazdırdım
                                                     console.log(obje);
                                                     console.log(obje[0]);//insert listesi
@@ -437,7 +437,13 @@ function LessonEditPage() {
                                                         .then(response => {
                                                             console.log(response);
                                                         }).catch(err => console.log(err))
-
+                                                        //bu çözüm :(
+                                                        counter=counter+1;
+                                                        if(counter>1){
+                                                            window.location.reload(true); 
+                                                        }
+                                                        console.log(counter);
+                                             
                                                     dialogClose()
                                                 }
                                                
