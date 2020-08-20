@@ -257,7 +257,7 @@ function LessonEditPage() {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar position="absolute" style={{ backgroundColor: "#b71540" }} className={clsx(classes.appBar, open && classes.appBarShift)}>
+            <AppBar position="absolute" style={{ backgroundColor: "#457b9d" }} className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton
                         edge="start"
@@ -300,6 +300,15 @@ function LessonEditPage() {
                         <Grid item xs={12}>
                             <div className="App">
                                 <MaterialTable
+                                    style={{backgroundColor: '#f8f9fa',}}
+                                    options={{
+                                        headerStyle: {
+                                            backgroundColor: '#f8f9fa',
+                                        },
+                                        rowStyle: {
+                                            backgroundColor: '#f8f9fa',
+                                        }
+                                    }}
                                     title="Ders Listesi"
                                     columns={state.columns}
                                     data={state.data}

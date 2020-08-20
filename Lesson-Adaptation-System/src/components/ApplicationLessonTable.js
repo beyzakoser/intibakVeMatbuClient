@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import MaterialTable from 'material-table';
+import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 function ApplicationLessonTable() {
@@ -20,6 +21,14 @@ function ApplicationLessonTable() {
             { derskodu: 'FZ102', dersadi: 'Physic II', kredi:"5", akts:"7", basarinotu:"CB", },
         ],
     });
+    const student = {
+        name : "Ahmet",
+        UniverstyYear : 2012,
+        lessons : [
+            { derskodu: 'MAT207', dersadi: 'Calculus I', kredi:"5", akts:"7", basarinotu:"BA", },
+            { derskodu: 'MAT208', dersadi: 'Calculus II', kredi:"5", akts:"7", basarinotu:"AA", },
+        ]
+    }
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>

@@ -171,7 +171,7 @@ export default function Application() {
             <Button variant="contained" color="primary"  style={{marginLeft:"90%"}} 
             onClick={ 
               () => {
-              console.log(person);
+              //console.log(person);
               axios.post('http://localhost:3004/basvuru', person)
               .catch(err => console.log(err))
               
